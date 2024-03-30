@@ -1,0 +1,52 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<title>Roll a Dice Game</title> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+<style> 
+body { 
+font-family: Arial, sans-serif; 
+text-align: center; 
+} 
+
+button { 
+padding: 10px 20px; 
+font-size: 16px; 
+margin-top: 20px; 
+background-color: #007bff; 
+color: white; 
+border: none; 
+cursor: pointer; 
+} 
+
+#dice { 
+font-size: 72px; 
+margin-top: 20px; 
+font-family: "Impact", sans-serif; 
+text-transform: uppercase; 
+text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); 
+} 
+</style> 
+</head>
+<body> 
+<h1>Roll a Dice Game</h1> 
+<p>Click the button below to roll the dice:</p> 
+<button onclick="rollDice()">Roll Dice</button> 
+<button onclick="resetDice()"><i class="fas fa-redo-alt"></i></button> <!-- Reset icon -->
+<h2>You rolled:</h2>
+<p id="dice"></p> 
+<script> 
+function rollDice() { 
+var diceValue = Math.floor(Math.random() * 6) + 1; 
+var randomColor = '#' + Math.floor(Math.random()*16777215).toString(16); // Generate random color
+document.getElementById("dice").innerText = diceValue;
+document.getElementById("dice").style.color = randomColor; // Change text color to random color
+} 
+
+function resetDice() { 
+document.getElementById("dice").innerText = ""; 
+document.getElementById("dice").style.color = 'black'; 
+} 
+</script> 
+</body> 
+</html>
