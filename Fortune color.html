@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fortune Color</title>
+  <style>
+    #wrapper {
+      text-align: center;
+    }
+    #fortune-color {
+      font-size: 24px;
+      font-weight: bold;
+      display: none;
+    }
+    #random-color {
+      font-size: 28px;
+      font-weight: bold;
+      display: none;
+    }
+    .color-box {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      margin: 10px;
+      border: 2px solid black;
+    }
+  </style>
+  <script>
+    function checkFortuneColor() {
+      var colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'turquoise', 'brown', 'grey', 'black', 'white', 'cyan', 'magenta', 'lime', 'gold', 'silver', 'maroon', 'olive', 'navy', 'teal', 'crimson', 'indigo', 'lavender', 'peach'];
+      var randomColor = colors[Math.floor(Math.random() * colors.length)];
+      
+      document.getElementById('fortune-color').style.display = 'none';
+      document.getElementById('random-color').style.display = 'block';
+      var randomColorDisplay = document.getElementById('random-color');
+      randomColorDisplay.innerHTML = '';
+      var colorBox = document.createElement('div');
+      colorBox.classList.add('color-box');
+      colorBox.style.backgroundColor = randomColor;
+      randomColorDisplay.appendChild(colorBox);
+    }
+  </script>
+</head>
+<body>
+  <div id="wrapper">
+    <h3>Check your fortune color!</h3>
+    <button onclick="checkFortuneColor()">Get Fortune Color</button>
+    <p id="fortune-color">Your fortune color is:</p>
+    <p id="random-color"></p>
+  </div>
+</body>
+</html>
