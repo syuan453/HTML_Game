@@ -1,31 +1,31 @@
-<!DOCTYPE html> 
-<html> 
-<head> 
-<title>Roll a Dice Game</title> 
+<!DOCTYPE html>
+<html>
+<head>
+<title>Roll a Dice Game</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-<style> 
-body { 
-font-family: Arial, sans-serif; 
-text-align: center; 
-} 
+<style>
+body {
+font-family: Arial, sans-serif;
+text-align: center;
+}
 
-button { 
-padding: 10px 20px; 
-font-size: 16px; 
-margin-top: 20px; 
-background-color: #007bff; 
-color: white; 
-border: none; 
-cursor: pointer; 
-} 
+button {
+padding: 10px 20px;
+font-size: 16px;
+margin-top: 20px;
+background-color: #007bff;
+color: white;
+border: none;
+cursor: pointer;
+}
 
-#dice { 
-font-size: 72px; 
-margin-top: 20px; 
-font-family: "Impact", sans-serif; 
-text-transform: uppercase; 
-text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); 
-} 
+#dice {
+font-size: 10vw; /* Adjusted font size for responsive design */
+margin-top: 20px;
+font-family: "Impact", sans-serif;
+text-transform: uppercase;
+text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
 
 #startPage {
 display: block;
@@ -35,43 +35,43 @@ display: block;
 display: none;
 }
 
-</style> 
+</style>
 </head>
-<body> 
+<body>
 <div id="startPage">
-<h1>Roll a Dice Game</h1> 
-<button onclick="startGame()">Start Game</button> 
+<h1>Roll a Dice Game</h1>
+<button onclick="startGame()">Start Game</button>
 </div>
 
 <div id="gamePage">
-<h1>Roll a Dice Game</h1> 
-<p>Click the button below to roll the dice:</p> 
-<button onclick="rollDice()">Roll Dice</button> 
+<h1>Roll a Dice Game</h1>
+<p>Click the button below to roll the dice:</p>
+<button onclick="rollDice()">Roll Dice</button>
 <button onclick="resetDice()"><i class="fas fa-redo-alt"></i></button> <!-- Reset icon -->
 <h2>You rolled:</h2>
-<p id="dice"></p> 
+<p id="dice"></p>
 </div>
 
-<script> 
+<script>
 
 function startGame() {
 document.getElementById("startPage").style.display = "none";
 document.getElementById("gamePage").style.display = "block";
 }
 
-function rollDice() { 
-var diceValue = Math.floor(Math.random() * 6) + 1; 
+function rollDice() {
+var diceValue = Math.floor(Math.random() * 6) + 1;
 var randomColor = '#' + Math.floor(Math.random()*16777215).toString(16); // Generate random color
 document.getElementById("dice").innerText = diceValue;
 document.getElementById("dice").style.color = randomColor; // Change text color to random color
-} 
+}
 
-function resetDice() { 
-document.getElementById("dice").innerText = ""; 
-document.getElementById("dice").style.color = 'black'; 
+function resetDice() {
+document.getElementById("dice").innerText = "";
+document.getElementById("dice").style.color = 'black';
 document.getElementById("gamePage").style.display = "none";
 document.getElementById("startPage").style.display = "block";
-} 
-</script> 
-</body> 
+}
+</script>
+</body>
 </html>
