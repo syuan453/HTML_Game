@@ -62,12 +62,35 @@ document.getElementById("gamePage").style.display = "block";
 function rollDice() {
 var diceValue = Math.floor(Math.random() * 6) + 1;
 var randomColor = '#' + Math.floor(Math.random()*16777215).toString(16); // Generate random color
-document.getElementById("dice").innerText = diceValue;
+var diceSymbol = "";
+switch (diceValue) {
+  case 1:
+    diceSymbol = "&#9856;";
+    break;
+  case 2:
+    diceSymbol = "&#9857;";
+    break;
+  case 3:
+    diceSymbol = "&#9858;";
+    break;
+  case 4:
+    diceSymbol = "&#9859;";
+    break;
+  case 5:
+    diceSymbol = "&#9860;";
+    break;
+  case 6:
+    diceSymbol = "&#9861;";
+    break;
+  default:
+    diceSymbol = "&#9856;"; // Default to dice symbol for 1
+}
+document.getElementById("dice").innerHTML = diceSymbol;
 document.getElementById("dice").style.color = randomColor; // Change text color to random color
 }
 
 function resetDice() {
-document.getElementById("dice").innerText = "";
+document.getElementById("dice").innerHTML = "";
 document.getElementById("dice").style.color = 'black';
 document.getElementById("gamePage").style.display = "none";
 document.getElementById("startPage").style.display = "block";
