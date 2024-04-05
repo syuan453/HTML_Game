@@ -62,9 +62,8 @@ html, body {
 <div id="startPage">
   <div id="mainContainer">
     <h1>Memory Challenge</h1>
-<br>
     <h2>Click on the keyboard numbers in the order they light up.</h2>
-<br>
+    <h3 id="highScore">Highest Score: 0</h3>
     <button id="startGameButton">Start Game</button>
   </div>
 </div>
@@ -94,6 +93,7 @@ html, body {
   let sequence = [];
   let level = 1;
   let currentStep = 0;
+  let highScore = 0;
   const boxs = document.querySelectorAll('.box');
 
   boxs.forEach(box => {
@@ -125,12 +125,16 @@ html, body {
       
       if(currentStep === sequence.length) {
         document.getElementById("nextLevelButton").style.display = "inline";
+        if (level > highScore) {
+          highScore = level;
+          document.getElementById("highScore").innerHTML = "Highest Score: " + highScore;
+        }
       }
     } else {
-      alert("Game Over. You have completed " + (level-1)+" level.");
+      alert("Game Over. You have completed " + (level-1)+" level. Highest Score: " + highScore);
       level = 1;
       sequence = [];
-      document.getElementById("level").innerHTML = "Level:  " + level;
+      document.getElementById("level").innerHTML = "Level: " + level;
       document.getElementById("gamePage").style.display = "none";
       document.getElementById("nextLevelButton").style.display = "none";
       document.getElementById("startPage").style.display = "block";
