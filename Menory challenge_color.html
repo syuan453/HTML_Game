@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .box {
+    width: 50px;
+    height: 50px;
+    background-color: black;
+    margin: 15px;
+    display: inline-block;
+    cursor: pointer;
+    opacity: 0.5;
+    color: white;
+    font-size: 30px;
+    text-align: center;
+    line-height: 50px;
+  }
+
+  .box:hover {
+    cursor: pointer;
+  }
+
+  #startGameButton, #nextLevelButton {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  #mainContainer {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.box {
+  width: 10vw; /* % of the viewport width */
+  height: 10vh; /* % of the viewport height */
+  line-height: 10vh;
+}
+
+#startGameButton, #nextLevelButton {
+  margin-top: 3vh; /* % of the viewport height */
+  font-size: 3vw; /* % of the viewport width for font size */
+  padding: 3vh 3vw; /* % of the viewport height for padding */
+}
+
+</style>
+</head>
+<body>
+<div id="startPage">
+  <div id="mainContainer">
+    <h1>Memory Challenge</h1>
+<br>
+    <h2>Click on the keyboard numbers in the order they light up.</h2>
+<br>
+    <button id="startGameButton">Start Game</button>
+  </div>
+</div>
+
+<div id="gamePage" style="display: none;">
+  <div id="mainContainer">
+    <h1>Memory Challenge</h1>
+    <h2 id="level"></h2>
+    <div id="gameBoard">
+      <div class="box" id="box7"></div>
+      <div class="box" id="box8"></div>
+      <div class="box" id="box9"></div>
+      <br>
+      <div class="box" id="box4"></div>
+      <div class="box" id="box5"></div>
+      <div class="box" id="box6"></div>
+      <br>
+      <div class="box" id="box1"></div>
+      <div class="box" id="box2"></div>
+      <div class="box" id="box3"></div>
+    </div>
+    <button id="nextLevelButton" style="display: none;">Next Level</button>
+  </div>
+</div>
+
+<script>
+  let sequence = [];
+  let level = 1;
+  let currentStep = 0;
+  const boxs = document.querySelectorAll('.box');
+
+  boxs.forEach(box => {
+    box.addEventListener('click', () => {
+      checkSequence(box.id);
+    });
+  });
+
+  document.addEventListener('keypress', (event) => {
+    const key = parseInt(event.key);
+    if (key >= 1 && key <= 9) {
+      const boxId = "box" + key;
+      const box = document.getElementById(boxId);
+      checkSequence(boxId);
+    }
+    if (event.key === "Enter") {
+      if (document.getElementById("startGameButton").style.display === "inline") {
+        document.getElementById("startGameButton").click();
+      } else if (document.getElementById("nextLevelButton").style.display === "inline") {
+        document.getElementById("nextLevelButton").click();
+      }
+    }
+  });
+
+  function checkSequence(boxId) {
+    if(boxId === "box" + sequence[currentStep]) {
+      document.getElementById(boxId).style.background = "green";//Change color
+      currentStep++;
+      
+      if(currentStep === sequence.length) {
+        document.getElementById("nextLevelButton").style.display = "inline";
+      }
+    } else {
+      alert("Game Over. You have completed " + (level-1)+" level.");
+      level = 1;
+      sequence = [];
+      document.getElementById("level").innerHTML = "Level:  " + level;
+      document.getElementById("gamePage").style.display = "none";
+      document.getElementById("nextLevelButton").style.display = "none";
+      document.getElementById("startPage").style.display = "block";
+    }
+  }
+
+  document.getElementById("startGameButton").addEventListener('click', () => {
+    level = 1;//Change start level
+    sequence = [];
+    document.getElementById("level").innerHTML = "Level: " + level;
+    document.getElementById("startPage").style.display = "none";
+    document.getElementById("gamePage").style.display = "block";
+    document.getElementById("nextLevelButton").style.display = "none";
+    startSequence();
+  });
+
+  document.getElementById("nextLevelButton").addEventListener('click', () => {
+    level++;
+    document.getElementById("level").innerHTML = "Level: " + level;
+    document.getElementById("nextLevelButton").style.display = "none";
+    startSequence();
+  });
+
+  function startSequence() {
+    sequence = [];
+    for (let i = 0; i < level; i++) {
+      let randomBox = Math.floor(Math.random() * 9) + 1;
+      sequence.push(randomBox);
+    }
+
+    currentStep = 0;
+    
+    // Clear background color at the start of each level
+    boxs.forEach(box => {
+      box.style.background = "black";//Change color
+    });
+
+    let i = 0;
+    let interval = setInterval(() => {
+      document.getElementById("box" + sequence[i]).style.opacity = 1;
+      setTimeout(() => {
+        document.getElementById("box" + sequence[i]).style.opacity = 0.5;
+        i++;
+        if(i === sequence.length) {
+          clearInterval(interval);
+        }
+      }, 250); // Decrease the time here to make the lights appear quickly
+    }, 500); // Decrease the time here to make the interval between lights shorter
+  }
+</script>
+</body>
+</html>
