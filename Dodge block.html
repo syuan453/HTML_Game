@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DodgeBlock</title>
     <style>
+        /* CSS */
         canvas {
             border: 1px solid black;
             display: block;
@@ -49,47 +50,57 @@
 </head>
 
 <body>
+    <!-- Start Screen -->
     <div id="startScreen">
         <h1>DodgeBlock</h1>
         <button id="startButton">Start Game</button>
     </div>
 
+    <!-- Game Canvas -->
     <canvas id="gameCanvas" width="400" height="430"></canvas>
 
+    <!-- Audio Elements -->
     <audio id="collisionSound" src="collision.mp3"></audio>
     <audio id="scoreSound" src="score.mp3"></audio>
     <audio id="backgroundMusic" src="backgroundMusic.mp3" loop></audio>
 
+    <!-- Mobile Controls -->
     <div id="mobileControls">
         <button id="leftButton">Left</button>
         <button id="rightButton">Right</button>
     </div>
 
+    <!-- Reset Button -->
     <div id="resetButtonDiv" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
         <button id="resetButton">Reset Game</button>
     </div>
 
     <script>
+        // Get the canvas and its context
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
+        // Game parameters
         const blockWidth = 20;
         const blockHeight = 20;
         const roadWidth = 300;
-        const roadHeight = 600;
         const obstacleWidth = 40;
         const obstacleHeight = 10;
-        let obstacleSpeed = 3; // Adjust obstacle speed here
+        let obstacleSpeed = 3; // Adjust obstacle speed
         const blockSpeed = 30;
         const minGap = 50;
         let score = 0;
 
+        // Initialize block position and obstacle array
         let blockX = canvas.width / 2 - blockWidth / 2;
         let blockY = canvas.height - blockHeight - 10;
         let obstacles = [];
+
+        // Game state
         let gameStarted = false;
         let gameOver = false;
 
+        // DOM elements
         const startScreen = document.getElementById('startScreen');
         const startButton = document.getElementById('startButton');
         const leftButton = document.getElementById('leftButton');
@@ -97,11 +108,13 @@
         const resetButton = document.getElementById('resetButton');
         const resetButtonDiv = document.getElementById('resetButtonDiv');
 
+        // Event listeners
         startButton.addEventListener('click', startGame);
         leftButton.addEventListener('click', () => moveBlock('left'));
         rightButton.addEventListener('click', () => moveBlock('right'));
         resetButton.addEventListener('click', resetGame);
 
+        // Start game function
         function startGame() {
             gameStarted = true;
             startScreen.style.display = 'none';
@@ -110,6 +123,7 @@
             gameLoop();
         }
 
+        // Reset game function
         function resetGame() {
             gameStarted = false;
             gameOver = false;
@@ -117,26 +131,24 @@
             blockX = canvas.width / 2 - blockWidth / 2;
             obstacles = [];
             obstacleSpeed = 3; // Reset obstacle speed
-            for (let i = 0; i < 5; i++) {
-                obstacles.push({
-                    x: Math.random() * (canvas.width - obstacleWidth),
-                    y: -obstacleHeight - Math.random() * 300
-                });
-            }
+            generateObstacles();
             startScreen.style.display = 'flex';
             resetButtonDiv.style.display = 'none';
         }
 
+        // Draw the road function
         function drawRoad() {
             ctx.fillStyle = 'lightgray';
             ctx.fillRect((canvas.width - roadWidth) / 2, 0, roadWidth, canvas.height);
         }
 
+        // Draw the block function
         function drawBlock() {
             ctx.fillStyle = 'red';
             ctx.fillRect(blockX, blockY, blockWidth, blockHeight);
         }
 
+        // Draw obstacles function
         function drawObstacles() {
             ctx.fillStyle = 'blue';
             obstacles.forEach(function (obstacle) {
@@ -144,10 +156,12 @@
             });
         }
 
+        // Clear canvas function
         function clearCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
+        // Update game function
         function update() {
             clearCanvas();
             drawRoad();
@@ -158,6 +172,7 @@
             updateScore();
         }
 
+        // Move block function
         function moveBlock(direction) {
             if (direction === 'left' && blockX > (canvas.width - roadWidth) / 2) {
                 blockX -= blockSpeed;
@@ -166,6 +181,7 @@
             }
         }
 
+        // Move obstacles function
         function moveObstacles() {
             obstacles.forEach(function (obstacle) {
                 obstacle.y += obstacleSpeed;
@@ -176,6 +192,7 @@
             });
         }
 
+        // Check collision function
         function checkCollision() {
             obstacles.forEach(function (obstacle) {
                 if (
@@ -193,6 +210,7 @@
             });
         }
 
+        // Update score function
         function updateScore() {
             ctx.fillStyle = 'white';
             ctx.font = '24px Arial';
@@ -200,6 +218,7 @@
             ctx.fillText('Score: ' + score, canvas.width / 2, 30);
         }
 
+        // Keyboard event listener
         document.addEventListener('keydown', function (event) {
             if (event.key === 'ArrowLeft') {
                 moveBlock('left');
@@ -208,23 +227,28 @@
             }
         });
         
+        // Pressing Enter starts or resets the game
         document.addEventListener('keydown', function(event) {
-				    if (event.key === 'Enter') {
-				        if (gameOver) {
-				            resetGame();
-				        } else {
-				            startGame();
-				        }
-				    }
-				});
-				
-        for (let i = 0; i < 5; i++) {
-            obstacles.push({
-                x: Math.random() * (canvas.width - obstacleWidth),
-                y: -obstacleHeight - Math.random() * 300
-            });
+            if (event.key === 'Enter') {
+                if (gameOver) {
+                    resetGame();
+                } else {
+                    startGame();
+                }
+            }
+        });
+        
+        // Generate initial obstacles
+        function generateObstacles() {
+            for (let i = 0; i < 5; i++) {
+                obstacles.push({
+                    x: Math.random() * (canvas.width - obstacleWidth),
+                    y: -obstacleHeight - Math.random() * 300
+                });
+            }
         }
-
+        
+        // Game loop function
         function gameLoop() {
             if (!gameStarted || gameOver) {
                 return;
@@ -238,6 +262,9 @@
                 obstacleSpeed++; // Increase obstacle speed every ? points
             }
         }
+        
+        // Initialize obstacles generation
+        generateObstacles();
 
     </script>
 </body>
