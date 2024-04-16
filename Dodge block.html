@@ -33,13 +33,14 @@
             border: none;
             cursor: pointer;
             margin-top: 50px;
+            align-items: center;
         }
 
         #mobileControls {
             display: none;
         }
 
-        @media only screen and (max-width: 600px) {
+        @media only screen and (max-width: 320px) {
             #mobileControls {
                 display: flex;
                 justify-content: center;
@@ -57,7 +58,7 @@
     </div>
 
     <!-- Game Canvas -->
-    <canvas id="gameCanvas" width="320" height="450"></canvas>
+    <canvas id="gameCanvas" width="320" height="480"></canvas>
 
     <!-- Audio Elements -->
     <audio id="collisionSound" src="collision.mp3"></audio>
@@ -83,7 +84,7 @@
         // Game parameters
         const blockWidth = 20;
         const blockHeight = 20;
-        const roadWidth = 300;
+        const roadWidth = 320;
         const obstacleWidth = 40;
         const obstacleHeight = 10;
         let obstacleSpeed = 3; // Adjust obstacle speed
