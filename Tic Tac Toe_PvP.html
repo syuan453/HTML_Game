@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe Game</title>
     <style>
@@ -50,25 +51,41 @@
         h1 {
             text-align: center;
             font-size: 2em;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
 
-        #player {
+        #text {
             text-align: center;
             font-size: 1em;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
         }
 
         .win {
             background-color: lightgreen;
         }
+
+        .button {
+            background-color: gray;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .button:hover {
+            background-color: lightgray;
+        }
+
     </style>
 </head>
 <body>
     <div id="game-container">
         <h1>Tic Tac Toe Game</h1>
-        <p>Player&#128100; vs Player&#128100;</p>        
-        <div id="player">Current Player: O</div>
+        <div id="text">Player&#128100; vs Player&#128100;</div>        
+        <div id="text">Current Player: O</div>
+	<button onclick="refreshPage()">Restart</button>
         <div id="board">
             <div class="cell" id="0"></div>
             <div class="cell" id="1"></div>
@@ -149,6 +166,11 @@
             gameEnded = false;
             playerElement.innerText = `Current Player: O`;
         }
+
+        function refreshPage() {
+            location.reload();
+        }
+
     </script>
 </body>
 </html>
