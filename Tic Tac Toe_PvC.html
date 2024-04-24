@@ -70,7 +70,7 @@
         <h1>Tic Tac Toe Game</h1>
         <div>Player👤 vs Computer💻</div>
         <div id="player">Player: O</div>
-        <button onclick="window.location.href='https://syuan453.github.io/HTML_Games/Tic%20Tac%20Toe_select%20mode.html'">Restart</button>
+        <button onclick="refreshPage()">Restart</button>
         <div id="board">
             <div class="cell" id="0"></div>
             <div class="cell" id="1"></div>
@@ -233,6 +233,10 @@
             Player = 'O';
             gameEnded = false;
             playerElement.innerText = `Player: O`;
+        }
+        
+        function refreshPage() {
+            location.reload();
         }
     </script>
 </body>
