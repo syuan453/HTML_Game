@@ -50,25 +50,40 @@
         h1 {
             text-align: center;
             font-size: 2em;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
 
-        #player {
+        #text {
             text-align: center;
             font-size: 1em;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
         }
 
         .win {
             background-color: lightgreen;
+        }
+
+        .button {
+            background-color: gray;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .button:hover {
+            background-color: lightgray;
         }
     </style>
 </head>
 <body>
     <div id="game-container">
         <h1>Tic Tac Toe Game</h1>
-        <p>Player👤 vs Computer💻</p>
-        <div id="player">Player: O</div>
+        <div id="text">Player👤 vs Computer💻</div>
+        <div id="text">Player: O</div>
+	<button onclick="refreshPage()">Reatart</button>
         <div id="board">
             <div class="cell" id="0"></div>
             <div class="cell" id="1"></div>
@@ -84,18 +99,18 @@
 
     <script>
         const cells = document.querySelectorAll('.cell');
-        let Player = 'O';
+        let currentPlayer = 'O';
         let gameEnded = false;
 
         const playerElement = document.getElementById('player');
 
         cells.forEach(cell => {
             cell.addEventListener('click', () => {
-                if (cell.innerText === '' && !gameEnded && Player === 'O') {
-                    cell.innerText = Player;
+                if (cell.innerText === '' && !gameEnded && currentPlayer === 'O') {
+                    cell.innerText = currentPlayer;
                     if (!checkWinner() && !isBoardFull()) {
-                        Player = 'X';
-                        playerElement.innerText = `Player: X`;
+                        currentPlayer = 'X';
+                        playerElement.innerText = `Current Player: X`;
                         computerMove();
                     }
                 }
@@ -119,8 +134,8 @@
             }
 
             if (!checkWinner() && !isBoardFull()) {
-                Player = 'O';
-                playerElement.innerText = `Player: O`;
+                currentPlayer = 'O';
+                playerElement.innerText = `Current Player: O`;
             }
         }
 
@@ -200,7 +215,7 @@
                     cells[c].classList.add('win');
                     gameEnded = true;
                     setTimeout(() => {
-                        alert(`Player ${Player} wins!`);
+                        alert(`Player ${currentPlayer} wins!`);
                         resetGame();
                     }, 100);
                     return true;
@@ -228,10 +243,15 @@
                 cell.innerText = '';
                 cell.classList.remove('win');
             });
-            Player = 'O';
+            currentPlayer = 'O';
             gameEnded = false;
-            playerElement.innerText = `Player: O`;
+            playerElement.innerText = `Current Player: O`;
         }
+
+        function refreshPage() {
+            location.reload();
+        }
+
     </script>
 </body>
 </html>
