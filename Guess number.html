@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guess Number Game</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    h1 {
+        color: #333;
+    }
+    input[type="number"] {
+        padding: 5px;
+        margin-right: 10px;
+    }
+    button {
+        padding: 5px 10px;
+    }
+    #feedback {
+        font-weight: bold;
+        margin-top: 20px;
+    }
+    #guessList {
+        list-style-type: none;
+        padding: 0;
+    }
+    li {
+        text-align: center;
+        margin-top: 5px;
+    }
+</style>
+</head>
+<body>
+<h1>Guess Number (1A2B)</h1>
+
+<input type="number" id="guessInput" onkeydown="if(event.keyCode==13) checkGuess()">
+<button onclick="checkGuess()">Submit Guess</button>
+<p id="feedback"></p>
+<h2>Guess History</h2>
+<ol id="guessList"></ol>
+<script>
+    let secretNumber = generateSecretNumber();
+    let guessHistory = [];
+
+    function generateSecretNumber() {
+        let number = '';
+        while (number.length < 4) {
+            let digit = Math.floor(Math.random() * 10).toString();
+            if (!number.includes(digit)) {
+                number += digit;
+            }
+        }
+        return number;
+    }
+
+    function checkGuess() {
+        const guessInput = document.getElementById('guessInput');
+        const guess = guessInput.value;
+        if (guess.length !== 4 || !/^\d{4}$/.test(guess) || hasDuplicates(guess)) {
+            alert('Please enter a 4-digit number with no repeated digits.');
+            return;
+        }
+
+        let feedback = '';
+        let correctDigits = 0;
+
+        for (let i = 0; i < guess.length; i++) {
+            if (guess[i] === secretNumber[i]) {
+                correctDigits++;
+            } else if (secretNumber.includes(guess[i])) {
+                feedback += 'B';
+            }
+        }
+
+        feedback = `${correctDigits}A${feedback.length}B`;
+        let guessResult = {
+            guess: guess,
+            feedback: feedback
+        };
+        guessHistory.push(guessResult);
+
+        if (feedback === '4A0B') {
+            let playAgain = confirm('Congratulations! You guessed the number! Play again?');
+            if (playAgain) {
+                resetGame();
+            } else {
+                window.close();
+            }
+        } else {
+            document.getElementById('feedback').textContent = feedback;
+            updateGuessHistory();
+            guessInput.value = '';
+        }
+    }
+
+    function updateGuessHistory() {
+        const guessList = document.getElementById('guessList');
+        guessList.innerHTML = '';
+        guessHistory.forEach((guessResult, index) => {
+            let listItem = document.createElement('li');
+            listItem.textContent = `${index + 1}. ${guessResult.guess} - ${guessResult.feedback}`;
+            guessList.appendChild(listItem);
+        });
+    }
+
+    function resetGame() {
+        secretNumber = generateSecretNumber();
+        guessHistory = [];
+        document.getElementById('feedback').textContent = '';
+        document.getElementById('guessInput').value = '';
+        document.getElementById('guessList').innerHTML = '';
+    }
+
+    function hasDuplicates(str) {
+        return (/([0-9]).*?\1/).test(str);
+    }
+</script>
+</body>
+</html>
