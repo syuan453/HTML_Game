@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bingo Game</title>
+<style>
+    table {
+        border-collapse: collapse;
+        margin: 50px auto;
+    }
+    td {
+        width: 50px;
+        height: 50px;
+        border: 1px solid black;
+        text-align: center;
+        cursor: pointer;
+    }
+    .selected {
+        background-color: lightblue;
+    }
+</style>
+</head>
+<body>
+<h1 style=text-align:center>Bingo Game</h1>
+<p style=text-align:center>最先集滿五條水平線、垂直線或對角線者勝利。</p>
+<table>
+    <tr>
+        <td id="cell1"></td>
+        <td id="cell2"></td>
+        <td id="cell3"></td>
+        <td id="cell4"></td>
+        <td id="cell5"></td>
+    </tr>
+    <tr>
+        <td id="cell6"></td>
+        <td id="cell7"></td>
+        <td id="cell8"></td>
+        <td id="cell9"></td>
+        <td id="cell10"></td>
+    </tr>
+    <tr>
+        <td id="cell11"></td>
+        <td id="cell12"></td>
+        <td id="cell13"></td>
+        <td id="cell14"></td>
+        <td id="cell15"></td>
+    </tr>
+    <tr>
+        <td id="cell16"></td>
+        <td id="cell17"></td>
+        <td id="cell18"></td>
+        <td id="cell19"></td>
+        <td id="cell20"></td>
+    </tr>
+    <tr>
+        <td id="cell21"></td>
+        <td id="cell22"></td>
+        <td id="cell23"></td>
+        <td id="cell24"></td>
+        <td id="cell25"></td>
+    </tr>
+</table>
+<script>
+    var numbers = [];
+    var selectedCells = [];
+
+    for (var i = 1; i <= 25; i++) {
+        numbers.push(i);
+    }
+
+    numbers.sort(function(a, b){return 0.5 - Math.random()});
+
+    for (var i = 1; i <= 25; i++) {
+        document.getElementById('cell' + i).innerHTML = numbers[i-1];
+    }
+
+    function selectCell(cell) {
+        if (!selectedCells.includes(cell)) {
+            cell.classList.add('selected');
+            selectedCells.push(cell);
+            checkWin();
+        } else {
+            cell.classList.remove('selected');
+            selectedCells.splice(selectedCells.indexOf(cell), 1);
+        }
+    }
+
+    function checkWin() {
+        // Check for 3 lines
+        var lines = [
+        [1, 2, 3, 4, 5], 
+        [6, 7, 8, 9, 10], 
+        [11, 12, 13, 14, 15], 
+        [16, 17, 18, 19, 20], 
+        [21, 22, 23, 24, 25], 
+        [1, 6, 11, 16, 21], 
+        [2, 7, 12, 17, 22], 
+        [3, 8, 13, 18, 23],
+        [4, 9, 14, 19, 24],
+        [5, 10, 15, 20, 25],
+        [1, 7, 13, 19, 25],
+        [5, 9, 13, 17, 21]
+        ];
+
+        var lineCount = 0;
+        for (var i = 0; i < lines.length; i++) {
+            if (lines[i].every(line => selectedCells.includes(document.getElementById('cell' + line)))) {
+                lineCount++;
+                if (lineCount === 5) {
+                    alert('Congratulations! You won!');
+                }
+            }
+        }
+    }
+
+    document.querySelectorAll('td').forEach(cell => {
+        cell.addEventListener('click', function() {
+            selectCell(cell);
+        });
+    });
+</script>
+</body>
+</html>
