@@ -95,6 +95,29 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        #surrender-screen {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #20232a;
+            padding: 20px;
+            border: 2px solid #61dafb;
+            border-radius: 10px;
+            display: none;
+            text-align: center;
+        }
+
+        #surrender-screen button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #61dafb;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -120,13 +143,18 @@
         <img id="over" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgm4IPkXe_CyH_rk5BZum5cR5D5Gk4xY_RumlaM4VGckvgCkoklDVivPISJr6ZF_z3_Eh8X_yIKMlD94T_bBLAiMV1k0ZQdJnQYPHJDvxTWpVwGgQLlU15TDOMFhXBVrXOkPEN_1g7l21zCgxjc_PCnr0Jg1ZNOPCOAbYitqowHKnHJrg/s1600/image.png" alt="Game Over!">
         <button id="restart-button">重新開始</button>
     </div>
+    <div id="surrender-screen">
+        <p>你確定要投降嗎？ Do you want to surrender?</p>
+        <button id="yes-button">Yes</button>
+        <button id="no-button">No</button>
+    </div>
     <div id="scoreboard">
         Score: <span id="score">0</span> | Target: <span id="target-score"></span>
     </div>
     <script>
         let score = 0;
         let gameOver = false;
-        let targetScore = Math.floor(Math.random() * 9000) + 1000; //Range
+        let targetScore = Math.floor(Math.random() * 9000) + 1000;
 
         const targets = document.querySelectorAll('.target');
         const scoreElement = document.getElementById('score');
@@ -138,6 +166,9 @@
         const startScreen = document.getElementById('start-screen');
         const startButton = document.getElementById('start-button');
         const targetScoreElement = document.getElementById('target-score');
+        const surrenderScreen = document.getElementById('surrender-screen');
+        const yesButton = document.getElementById('yes-button');
+        const noButton = document.getElementById('no-button');
 
         targetScoreElement.textContent = targetScore;
 
@@ -154,7 +185,7 @@
             element.style.display = 'block';
             setTimeout(() => {
                 element.style.display = 'none';
-            }, Math.random() * 6000 + 3000); // Slow down movement
+            }, Math.random() * 6000 + 3000);
         }
 
         function startRandomMovement() {
@@ -163,7 +194,7 @@
                     if (!gameOver) {
                         moveElement(element);
                     }
-                }, Math.random() * 6000 + 3000); // Slow down intervals
+                }, Math.random() * 6000 + 3000);
             });
         }
 
@@ -177,6 +208,9 @@
                     break;
                 case '+200':
                     score += 200;
+                    break;
+                case '+50':
+                    score += 50;
                     break;
                 case '+20':
                     score += 20;
@@ -200,11 +234,7 @@
                     score = Math.floor(score / 3);
                     break;
                 case 'surrender':
-                    if (confirm('你確定要投降嗎？ Do you want to surrender?')) {
-                        gameOver = true;
-                        over.style.display = 'block';
-                        restartButton.style.display = 'block';
-                    }
+                    surrenderScreen.style.display = 'block';
                     return;
             }
             scoreElement.textContent = score;
@@ -242,6 +272,17 @@
             restartButton.style.display = 'none';
             scoreElement.textContent = score;
             startRandomMovement();
+        });
+
+        yesButton.addEventListener('click', () => {
+            gameOver = true;
+            surrenderScreen.style.display = 'none';
+            over.style.display = 'block';
+            restartButton.style.display = 'block';
+        });
+
+        noButton.addEventListener('click', () => {
+            surrenderScreen.style.display = 'none';
         });
     </script>
 </body>
