@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Shooter</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background-color: #282c34;
+            color: white;
+            cursor: none;
+        }
+
+        #game-area {
+            position: relative;
+            width: 98vw;
+            height: 85vh;
+            background-color: #20232a;
+            border: 2px solid #61dafb;
+            overflow: hidden;
+            display: none;
+        }
+
+        .target {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            font-size: 20px;
+            color: white;
+            text-align: center;
+            line-height: 50px;
+        }
+
+        #scoreboard {
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+        }
+
+        #crosshair {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 2px solid white;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+        }
+
+        #congrats, #over {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            max-width: 80%;
+            max-height: 80%;
+            width: auto;
+            height: auto;
+        }
+
+        #restart-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #61dafb;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #start-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #20232a;
+        }
+
+        #start-button {
+            padding: 15px 30px;
+            font-size: 24px;
+            background-color: #61dafb;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="start-screen">
+        <h1>Number Shooter Game</h1>
+        <button id="start-button">Start Game</button>
+    </div>
+    <div id="game-area">
+        <div class="target" style="background-color: hotpink;" data-score="*5">×5</div>
+        <div class="target" style="background-color: green;" data-score="*2">×2</div>
+        <div class="target" style="background-color: blue;" data-score="+200">+200</div>
+        <div class="target" style="background-color: orange;" data-score="+50">+50</div>
+        <div class="target" style="background-color: tomato;" data-score="+20">+20</div>
+        <div class="target" style="background-color: purple;" data-score="+1">+1</div>
+        <div class="target" style="background-color: pink;" data-score="-3">-3</div>
+        <div class="target" style="background-color: darkKhaki;" data-score="-50">-50</div>
+        <div class="target" style="background-color: LightGreen;" data-score="-200">-200</div>
+        <div class="target" style="background-color: MediumSlateBlue;" data-score="/4">÷4</div>
+        <div class="target" style="background-color: orchid;" data-score="/3">÷3</div>
+        <div class="target" style="background-color: black;" data-score="surrender">🏳️</div>
+        <div id="crosshair"></div>
+        <img id="congrats" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2Cpl-pfxZmwcuxVd6OsTPlCv7bVtQKfvC0TLSMMjPgnnt8F0wm53F97S3eYxULBXYdZNH-cPDKdKEODJ4ljflv_uSEnreEfitz4oO1BdAyaCpO0dEZjB82fINHygSu4ceyWcwef27NgVcbIXc4r5-YFz9ueFf4Hh8aA2M94IW9WomHQ/s1600/image.png" alt="Congratulations!">
+        <img id="over" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgm4IPkXe_CyH_rk5BZum5cR5D5Gk4xY_RumlaM4VGckvgCkoklDVivPISJr6ZF_z3_Eh8X_yIKMlD94T_bBLAiMV1k0ZQdJnQYPHJDvxTWpVwGgQLlU15TDOMFhXBVrXOkPEN_1g7l21zCgxjc_PCnr0Jg1ZNOPCOAbYitqowHKnHJrg/s1600/image.png" alt="Game Over!">
+        <button id="restart-button">重新開始</button>
+    </div>
+    <div id="scoreboard">
+        Score: <span id="score">0</span> | Target: <span id="target-score"></span>
+    </div>
+    <script>
+        let score = 0;
+        let gameOver = false;
+        let targetScore = Math.floor(Math.random() * 9000) + 1000; //Range
+
+        const targets = document.querySelectorAll('.target');
+        const scoreElement = document.getElementById('score');
+        const gameArea = document.getElementById('game-area');
+        const crosshair = document.getElementById('crosshair');
+        const congrats = document.getElementById('congrats');
+        const over = document.getElementById('over');
+        const restartButton = document.getElementById('restart-button');
+        const startScreen = document.getElementById('start-screen');
+        const startButton = document.getElementById('start-button');
+        const targetScoreElement = document.getElementById('target-score');
+
+        targetScoreElement.textContent = targetScore;
+
+        function getRandomPosition() {
+            const x = Math.floor(Math.random() * (gameArea.clientWidth - 50));
+            const y = Math.floor(Math.random() * (gameArea.clientHeight - 50));
+            return { x, y };
+        }
+
+        function moveElement(element) {
+            const { x, y } = getRandomPosition();
+            element.style.left = `${x}px`;
+            element.style.top = `${y}px`;
+            element.style.display = 'block';
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, Math.random() * 6000 + 3000); // Slow down movement
+        }
+
+        function startRandomMovement() {
+            targets.forEach(element => {
+                setInterval(() => {
+                    if (!gameOver) {
+                        moveElement(element);
+                    }
+                }, Math.random() * 6000 + 3000); // Slow down intervals
+            });
+        }
+
+        function updateScore(action) {
+            switch(action) {
+                case '*5':
+                    score *= 5;
+                    break;
+                case '*2':
+                    score *= 2;
+                    break;
+                case '+200':
+                    score += 200;
+                    break;
+                case '+20':
+                    score += 20;
+                    break;
+                case '+1':
+                    score += 1;
+                    break;
+                case '-3':
+                    score -= 3;
+                    break; 
+                case '-50':
+                    score -= 50;
+                    break; 
+                case '-200':
+                    score -= 200;
+                    break;
+                case '/4':
+                    score = Math.floor(score / 4);
+                    break;                                                                                
+                case '/3':
+                    score = Math.floor(score / 3);
+                    break;
+                case 'surrender':
+                    if (confirm('你確定要投降嗎？ Do you want to surrender?')) {
+                        gameOver = true;
+                        over.style.display = 'block';
+                        restartButton.style.display = 'block';
+                    }
+                    return;
+            }
+            scoreElement.textContent = score;
+            if (score === targetScore) {
+                gameOver = true;
+                congrats.style.display = 'block';
+                restartButton.style.display = 'block';
+            }
+        }
+
+        targets.forEach(target => {
+            target.addEventListener('click', () => {
+                if (!gameOver) updateScore(target.getAttribute('data-score'));
+            });
+        });
+
+        gameArea.addEventListener('mousemove', (e) => {
+            crosshair.style.left = `${e.clientX}px`;
+            crosshair.style.top = `${e.clientY}px`;
+        });
+
+        startButton.addEventListener('click', () => {
+            startScreen.style.display = 'none';
+            gameArea.style.display = 'block';
+            startRandomMovement();
+        });
+
+        restartButton.addEventListener('click', () => {
+            score = 0;
+            gameOver = false;
+            targetScore = Math.floor(Math.random() * 9000) + 1000;
+            targetScoreElement.textContent = targetScore;
+            congrats.style.display = 'none';
+            over.style.display = 'none';
+            restartButton.style.display = 'none';
+            scoreElement.textContent = score;
+            startRandomMovement();
+        });
+    </script>
+</body>
+</html>
