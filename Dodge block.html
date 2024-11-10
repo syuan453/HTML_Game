@@ -86,7 +86,7 @@
         const roadWidth = 300;
         const obstacleWidth = 40;
         const obstacleHeight = 10;
-        let obstacleSpeed = 3; // Adjust obstacle speed
+        let obstacleSpeed = 2; // Adjust obstacle speed
         const blockSpeed = 30;
         const minGap = 50;
         let score = 0;
@@ -130,7 +130,7 @@
             score = 0;
             blockX = canvas.width / 2 - blockWidth / 2;
             obstacles = [];
-            obstacleSpeed = 3; // Reset obstacle speed
+            obstacleSpeed = 2; // Reset obstacle speed
             generateObstacles();
             startScreen.style.display = 'flex';
             resetButtonDiv.style.display = 'none';
