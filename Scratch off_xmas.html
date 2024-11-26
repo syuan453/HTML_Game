@@ -24,7 +24,7 @@
             text-align: center;
             margin-bottom: 20px;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-            background-color: rgba(54, 143, 119, 0.5); 
+            background-color: rgba(10, 45, 77, 0.5); 
             padding: 10px 20px;
             border-radius: 15px;
         }
@@ -35,7 +35,8 @@
             background-color: #8fa195;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+            background-image: url('https://images.playground.com/23905116-fdd1-4c5b-8dad-019a053dbba5.jpeg');/* 刮開背景 */
             cursor: pointer;
             border: 5px solid #fff;
         }
@@ -44,8 +45,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 32px;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            font-size: 34px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
             color: #fff;
             text-align: center;
             visibility: hidden;
@@ -119,10 +120,10 @@
         clickToStart.style.color = '#d6eaf8'; 
         clickToStart.style.textShadow = '2px 2px 5px rgba(0, 0, 0, 0.7)'; 
         scratchCard.removeEventListener('click', enableScratch);
-        rewardElement.textContent = getRandomReward(); 
+        rewardElement.textContent = getRandomReward(); // 設置隨機獎勵
         scratchCard.addEventListener('mousemove', scratch);
-        scratchCard.addEventListener('touchmove', scratch); 
-        scratchCard.addEventListener('touchstart', scratch); 
+        scratchCard.addEventListener('touchmove', scratch); // 添加觸摸移動事件支持
+        scratchCard.addEventListener('touchstart', scratch); // 添加觸摸開始事件支持
     }
 
     function scratch(e) {
