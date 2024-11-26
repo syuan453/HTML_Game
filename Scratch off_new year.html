@@ -19,12 +19,12 @@
             color: #fff;
         }
         .game-title {
-            font-size: 32px;
+            font-size: 24px;
             font-weight: bold;
             text-align: center;
             margin-bottom: 20px;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-            background-color: #af0627;
+            background-color: rgba(175, 6, 39, 0.8); 
             padding: 10px 20px;
             border-radius: 15px;
         }
@@ -38,7 +38,7 @@
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
             cursor: pointer;
             border: 5px solid #fff;
-            background-image: linear-gradient(45deg, #bf0404, #df3d49);
+            background-image: linear-gradient(45deg, #bf0404, #ffe53b);/* 刮開背景 */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -128,7 +128,7 @@
         scratchCard.removeEventListener('click', enableScratch);
         rewardElement.textContent = getRandomReward(); 
         scratchCard.addEventListener('mousemove', scratch);
-        scratchCard.addEventListener('touchmove', scratch);
+        scratchCard.addEventListener('touchmove', scratch); 
         scratchCard.addEventListener('touchstart', scratch); 
     }
 
