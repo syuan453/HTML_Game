@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聖誕禮物刮刮樂</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+            background-image: url('https://images.playground.com/2158595b-6a39-4e26-812d-a7bb24c79872.png'); /* 背景圖片 */
+            background-size: cover; /* 自動調整背景圖片尺寸 */
+            background-position: center; /* 使圖片在中心顯示 */
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            color: #fff;
+        }
+        .game-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            background-color: rgba(54, 143, 119, 0.5); 
+            padding: 10px 20px;
+            border-radius: 15px;
+        }
+        .scratch-card {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            background-color: #8fa195;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            border: 5px solid #fff;
+        }
+        .reward {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            color: #fff;
+            text-align: center;
+            visibility: hidden;
+            white-space: nowrap; 
+        }
+        .click-to-start {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 30px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            color: #fff;
+            text-align: center;
+        }
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            animation: snow 15s linear infinite;
+            background-image: url('https://purepng.com/public/uploads/thumbnail/purepng.com-snowflakessnowflakesicecrystalssnow-1411527097760bvb9z.png'); /* 圖片 */
+            background-size: cover; /* 保持圖片比例 */
+        }
+        @keyframes snow {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 1000px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-title">🎁 聖誕禮物刮刮樂 🎁</div>
+
+<div class="scratch-card" id="scratchCard">
+    <div class="reward" id="reward"></div>
+    <canvas class="scratch" width="320" height="220"></canvas>
+    <div class="click-to-start">點擊開始!</div>
+    <div class="snowflake"></div>
+</div>
+
+<script>
+    const scratchCard = document.querySelector('.scratch');
+    const ctx = scratchCard.getContext("2d");
+    const rewardElement = document.getElementById('reward');
+    const clickToStart = document.querySelector('.click-to-start');
+    const scratchSize = 20;
+
+    // 清單
+    const rewards = [
+        '🎄 節日禮品包',
+        '🎅 購物折扣',
+        '☃️ 節日小卡'
+    ];
+
+    // 隨機
+    function getRandomReward() {
+        const randomIndex = Math.floor(Math.random() * rewards.length);
+        return rewards[randomIndex];
+    }
+
+    // 遮罩
+    ctx.fillStyle = '#44615f';
+    ctx.fillRect(0, 0, scratchCard.width, scratchCard.height);
+
+    function enableScratch() {
+        clickToStart.textContent = '刮出聖誕驚喜'; 
+        clickToStart.style.fontSize = '26px'; 
+        clickToStart.style.color = '#d6eaf8'; 
+        clickToStart.style.textShadow = '2px 2px 5px rgba(0, 0, 0, 0.7)'; 
+        scratchCard.removeEventListener('click', enableScratch);
+        rewardElement.textContent = getRandomReward(); 
+        scratchCard.addEventListener('mousemove', scratch);
+        scratchCard.addEventListener('touchmove', scratch); 
+        scratchCard.addEventListener('touchstart', scratch); 
+    }
+
+    function scratch(e) {
+        // 獲取滑鼠或觸摸事件的座標
+        let rect = scratchCard.getBoundingClientRect();
+        let x, y;
+
+        if (e.touches) {
+            // 觸摸事件
+            x = e.touches[0].clientX - rect.left;
+            y = e.touches[0].clientY - rect.top;
+            e.preventDefault(); // 防止頁面滾動
+        } else {
+            // 鼠標事件
+            x = e.clientX - rect.left;
+            y = e.clientY - rect.top;
+        }
+
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(x, y, scratchSize, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 隱藏提示
+        clickToStart.style.display = 'none';
+
+        // 檢查刮開的百分比
+        const imgData = ctx.getImageData(0, 0, scratchCard.width, scratchCard.height);
+        let transparentPixels = 0;
+        for (let i = 3; i < imgData.data.length; i += 4) {
+            if (imgData.data[i] === 0) transparentPixels++;
+        }
+        const totalPixels = scratchCard.width * scratchCard.height;
+        const percentage = (transparentPixels / totalPixels) * 100;
+
+        // 如果刮開超過70%則顯示獎勵並清除遮罩
+        if (percentage > 70) {
+            rewardElement.style.visibility = 'visible';
+
+            // 清除整個畫布
+            ctx.clearRect(0, 0, scratchCard.width, scratchCard.height);
+
+            // 移除事件監聽器
+            scratchCard.removeEventListener('mousemove', scratch);
+            scratchCard.removeEventListener('touchmove', scratch);
+            scratchCard.removeEventListener('touchstart', scratch);
+        }
+    }
+
+    scratchCard.addEventListener('click', enableScratch);
+</script>
+
+</body>
+</html>
