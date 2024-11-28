@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        #game-container {
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        .cell {
+            border: 1px solid #000;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            cursor: pointer;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 3px;
+        }
+
+        #player {
+            text-align: center;
+            font-size: 1em;
+            margin-bottom: 5px;
+        }
+
+        .win {
+            background-color: lightgreen;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Tic Tac Toe Game</h1>
+        <div>Player👤 vs Computer💻</div>
+        <div id="player">Player: O</div>
+        <button onclick="window.location.href='https://syuan453.github.io/HTML_Games/Tic%20Tac%20Toe_select%20mode.html'">Restart</button>
+        <div id="board">
+            <div class="cell" id="0"></div>
+            <div class="cell" id="1"></div>
+            <div class="cell" id="2"></div>
+            <div class="cell" id="3"></div>
+            <div class="cell" id="4"></div>
+            <div class="cell" id="5"></div>
+            <div class="cell" id="6"></div>
+            <div class="cell" id="7"></div>
+            <div class="cell" id="8"></div>
+        </div>
+    </div>
+
+    <script>
+        const cells = document.querySelectorAll('.cell');
+        let Player = 'O';
+        let gameEnded = false;
+
+        const playerElement = document.getElementById('player');
+
+        cells.forEach(cell => {
+            cell.addEventListener('click', () => {
+                if (cell.innerText === '' && !gameEnded && Player === 'O') {
+                    cell.innerText = Player;
+                    if (!checkWinner() && !isBoardFull()) {
+                        Player = 'X';
+                        playerElement.innerText = `Player: X`;
+                        computerMove();
+                    }
+                }
+            });
+        });
+
+        function computerMove() {
+            let emptyCells = Array.from(cells).filter(cell => cell.innerText === '');
+            let blockMove = checkPlayerBlockMove();
+          
+            if (blockMove) {
+                blockMove.innerText = 'X';
+            } else {
+                let winningMove = checkWinningMove();
+                if (winningMove) {
+                    winningMove.innerText = 'X';
+                } else {
+                    let randomIndex = Math.floor(Math.random() * emptyCells.length);
+                    emptyCells[randomIndex].innerText = 'X';
+                }
+            }
+
+            if (!checkWinner() && !isBoardFull()) {
+                Player = 'O';
+                playerElement.innerText = `Player: O`;
+            }
+        }
+
+        function checkPlayerBlockMove() {
+            const rows = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6]
+            ];
+
+            for (let row of rows) {
+                const [a, b, c] = row;
+                if (cells[a].innerText === 'X' && cells[b].innerText === 'X' && cells[c].innerText === '') {
+                    return cells[c];
+                }
+                if (cells[a].innerText === 'X' && cells[b].innerText === '' && cells[c].innerText === 'X') {
+                    return cells[b];
+                }
+                if (cells[a].innerText === '' && cells[b].innerText === 'X' && cells[c].innerText === 'X') {
+                    return cells[a];
+                }
+            }
+
+            return null;
+        }
+
+        function checkWinningMove() {
+            const rows = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6]
+            ];
+
+            for (let row of rows) {
+                const [a, b, c] = row;
+                if (cells[a].innerText === 'O' && cells[b].innerText === 'O' && cells[c].innerText === '') {
+                    return cells[c];
+                }
+                if (cells[a].innerText === 'O' && cells[b].innerText === '' && cells[c].innerText === 'O') {
+                    return cells[b];
+                }
+                if (cells[a].innerText === '' && cells[b].innerText === 'O' && cells[c].innerText === 'O') {
+                    return cells[a];
+                }
+            }
+
+            return null;
+        }
+
+        function checkWinner() {
+            const rows = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6]
+            ];
+
+            for (let row of rows) {
+                const [a, b, c] = row;
+                if (cells[a].innerText && cells[a].innerText === cells[b].innerText && cells[a].innerText === cells[c].innerText) {
+                    cells[a].classList.add('win');
+                    cells[b].classList.add('win');
+                    cells[c].classList.add('win');
+                    gameEnded = true;
+                    setTimeout(() => {
+                        alert(`Player ${Player} wins!`);
+                        resetGame();
+                    }, 100);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function isBoardFull() {
+            for (let cell of cells) {
+                if (cell.innerText === '') {
+                    return false;
+                }
+            }
+            setTimeout(() => {
+                alert('It\'s a tie! Game over.');
+            }, 100);
+            resetGame();
+            return true;
+        }
+
+        function resetGame() {
+            cells.forEach(cell => {
+                cell.innerText = '';
+                cell.classList.remove('win');
+            });
+            Player = 'O';
+            gameEnded = false;
+            playerElement.innerText = `Player: O`;
+        }
+
+    </script>
+</body>
+</html>
