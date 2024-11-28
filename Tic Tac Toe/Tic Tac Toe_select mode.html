@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe Game Selector</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        #game-container {
+            width: 100%;
+            max-width:400px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .button {
+            background-color: #AD5A5A;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .button:hover {
+            background-color: #C48888;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Tic Tac Toe Game</h1>
+        <button class="button" onclick="startGame('PvC')">Player👤 vs Computer💻</button>
+        <button class="button" onclick="startGame('PvP')">Player👤 vs Player👤</button>
+    </div>
+
+    <script>
+        function startGame(mode) {
+            if (mode === 'PvC') {
+                window.location.href = 'https://syuan453.github.io/HTML_Games/Tic%20Tac%20Toe/PvC.html';
+            } else if (mode === 'PvP') {
+                window.location.href = 'https://syuan453.github.io/HTML_Games/Tic%20Tac%20Toe/PvP.html';
+            }
+        }
+    </script>
+</body>
+</html>
